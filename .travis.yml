@@ -10,9 +10,6 @@ before_install:
 script:
   - docker-compose run rom bundle exec rspec
 
-after_success:
-  - bundle exec codeclimate-test-reporter
-
 env:
   global:
     - secure: "y+WKE+O64Mk9/MIiVDsHY12FsIDv31c5kGT1PD8X3bGzDLSs2RsxH+6aAPKj8soQIU6vN1cpXzHOI9rmgSa/jPwXN/TVhXNQUEaQGaCQjlucx4D7M0SjXxrEVcFsXeQpkb+sDH7zeRDj9mxnpzpHzFc1uLBodKUKFoqDJP67rYzdfHYTGettvGxPBR38gZxSPGejVNbb+cnY8bvUECK/Qn+0MTR3xjkZi+y4PKsj4ZlN7+4m8GOQt/S/9SK++5MJtlXXRtC7tufXZ3QJvmyfB/FbDYm5/e+ovAWVFI2s62/IuE5qdoEjBK3j8cKvTErrBzp1mo9JtM1QeJGAGuOroM8ki9cjPV+mtuFdIq7pzjBOK8ZIWGCQCljuIvyWZ88jZQzqkjgcREvBxGJa5u/maaNduUXWdfR/Q2DFazX7SfrD5CLXvinemVdPpo8/D0NhduSW8pgSKF0E9WBGng2z3BP40L+l7aTFfzrrirdzDNU1KsOzfDDs9+h9Rq8uwIhKiZhiPr+4ztXteNmaJMaeL9KnAgIhZGW1EYUkC1gAVXRkzaFFh3tnRhKAzU1LJxl2qskf0MJFgc/hr3hTHvWgYCQYe2QCZdulqb7HdnUH55Twsha+XVtMp25GxKVrTN4ET5L971xALGvTRxKaO2lekZmVxr4qauhyoXMUc1pCN4g="

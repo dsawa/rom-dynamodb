@@ -1,3 +1,5 @@
+require 'rom/dynamodb/version'
+
 module ROM
   describe DynamoDB do
     it "has a version number" do

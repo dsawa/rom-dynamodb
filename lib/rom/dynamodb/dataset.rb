@@ -168,83 +168,6 @@ module ROM
         end
       end
 
-      # Retrieves a key present within the composite key for this index by its
-      # exact value.
-      #
-      # @deprecated Use {#where} instead.
-      #
-      # @!macro chain_note
-      #
-      # @example Given a hash key table
-      #   relation.equal(:id, 1).one! #=> { id: 1, ... }
-      #
-      # @example Given a composite key table
-      #   relation.equal(:id, 1).equal(:created_at, Time.now.to_f).one! #=> { id: 1, ... }
-      #
-      # @param key [Symbol] the key to match the provided value against.
-      # @param val the value to match against the key in the index.
-      # @param predicate [Symbol] the query predicate to apply to DynamoDB.
-      #
-      # @return [self] the {Dataset} object the method was performed on.
-      def equal(key, val, predicate = :eq)
-        restrict_by(key, predicate, [val])
-      end
-
-      # Retrieves all matching range keys within the composite key for the
-      # index between two points.
-      #
-      # @deprecated Use {#where} instead.
-      #
-      # @!macro chain_note
-      # @!macro series_note
-      #
-      # @example Given a composite key table
-      #   users = relation.equal(:id, "mammal").between(:legs, 0, 4).to_a
-      #   users #=> [{id: "mammal", legs: 2, name: "Human"}, {id: "mammal", legs: 4, name: "Elephant"}, ...]
-      #
-      # @param key [Symbol] the key to match the provided value against.
-      # @param after the value to match range values after
-      # @param before the value to match range values before
-      #
-      # @return [self] the {Dataset} object the method was performed on.
-      def between(key, after, before, predicate = :between)
-        restrict_by(key, predicate, [after, before])
-      end
-
-      # Retrieves all matching range keys within the composite key after the
-      # value provided.
-      #
-      # @deprecated Use {#where} instead.
-      #
-      # @!macro chain_note
-      # @!macro series_note
-      #
-      # @deprecated Use {#where} instead.
-      #
-      # @example Given a composite key table
-      #   users = relation.equal(:id, "mammal").after(:legs, 0).to_a
-      #   users #=> [{id: "mammal", legs: 2, name: "Human"}, ...]
-      #
-      # @param key {Symbol} the key to match the provided value against.
-      # @param after the value to match range values after
-      # @param predicate [String] the query predicate to apply to DynamoDB.
-      #
-      # @return [self] the {Dataset} object the method was performed on.
-      def after(key, after, predicate = :ge)
-        restrict_by(key, predicate, [after])
-      end
-
-      # Retreives all matching range keys within the composite key before the
-      # value provided.
-      #
-      # @deprecated Use {#where} instead.
-      #
-      # @!macro chain_note
-      # @!macro series_note
-      def before(key, before, predicate = :le)
-        restrict_by(key, predicate, [before])
-      end
-
       def batch_get(query = nil)
         append(:batch_get) { query }
       end
@@ -290,6 +213,7 @@ module ROM
       def each(&block)
         each_item(build, &block)
       end
+      alias map each
 
       def connection
         @connection ||= Aws::DynamoDB::Client.new(config)
