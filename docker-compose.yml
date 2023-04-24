@@ -1,8 +1,8 @@
-version: '2'
+version: '3'
 
 services:
   dynamo:
-    image: deangiberson/aws-dynamodb-local
+    image: public.ecr.aws/aws-dynamodb-local/aws-dynamodb-local:1.21.0
     expose:
       - "8000"
     ports:
@@ -19,7 +19,6 @@ services:
       - TRAVIS_BRANCH
       - TRAVIS_JOB_ID
       - TRAVIS_PULL_REQUEST
-      - CODECLIMATE_REPO_TOKEN
     volumes:
       - .:/app
     links:

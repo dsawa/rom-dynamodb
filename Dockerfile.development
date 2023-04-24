@@ -1,5 +1,10 @@
-FROM davidkelley/base:ruby
+FROM public.ecr.aws/docker/library/ruby:2.7.8-alpine3.16
 
-ADD ./ $MOUNT_PATH
+ADD . /app
+WORKDIR /app
 
-RUN bundle install
+RUN apk add --no-cache build-base && \
+    apk add --no-cache ruby-dev && \
+    apk add --no-cache gmp-dev && \
+    apk add --no-cache git && \
+    bundle install

@@ -1,15 +1,15 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :table, class: Hash do
     table_name { SecureRandom.uuid }
 
     transient do
-      definitions({ id: :S })
+      definitions { { id: :S } }
 
-      schema({ id: :HASH })
+      schema { { id: :HASH } }
 
-      global([])
+      global { [] }
       
-      local([])
+      local { [] }
     end
 
     attribute_definitions do

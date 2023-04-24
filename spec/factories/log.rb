@@ -1,7 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :log, class: Hash do
     transient do
-      sequence_step 100
+      sequence_step { 100 }
     end
 
     host { Faker::Internet.ip_v6_address }

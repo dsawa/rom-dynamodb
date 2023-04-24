@@ -3,19 +3,13 @@ module ROM
     include_context 'dynamo'
 
     let(:descriptor) { :users }
-
     let(:table) { build(:table, table_name: descriptor) }
-
     let(:user) { build(:user) }
 
     let(:container) {
       ROM.container(:dynamodb, credentials) do |rom|
         rom.relation(descriptor) do
-          def by_id(id)
-            retrieve(key: { id: id })
-          end
-
-          def alter_by_id(val)
+          def by_id(val)
             where { id == val }
           end
         end
@@ -38,7 +32,7 @@ module ROM
       end
     }
 
-    let(:relation) { container.relation(descriptor) }
+    let(:relation) { container.relations[descriptor] }
 
     describe 'create' do
       subject(:command) { container.commands[descriptor][:create] }
@@ -65,13 +59,9 @@ module ROM
         it { should_not be_nil }
       end
 
-      specify { expect { subject.alter_by_id(user[:id]).call(name: name) }.to_not change { relation.count } }
+      specify { expect { subject.by_id(user[:id]).call(name: name) }.to_not change { relation.count } }
 
-      specify { expect { subject.alter_by_id(user[:id]).call(name: name) }.to change { relation.where(args) { id == id }.one!['name'] }.from(user[:name]).to(name) }
-
-      specify(:deprecated) { expect { subject.by_id(user[:id]).call(name: name) }.to_not change { relation.count } }
-
-      specify(:deprecated) { expect { subject.by_id(user[:id]).call(name: name) }.to change { relation.by_id(user[:id]).one!['name'] }.from(user[:name]).to(name) }
+      specify { expect { subject.by_id(user[:id]).call(name: name) }.to change { relation.where(args) { id == id }.one!['name'] }.from(user[:name]).to(name) }
     end
 
     describe 'delete' do
@@ -85,22 +75,16 @@ module ROM
 
       let(:args) { { id: user[:id] } }
 
-      specify { expect { subject.alter_by_id(user[:id]).call }.to change { relation.count }.by(-1) }
-
-      specify(:deprecated) { expect { subject.by_id(user[:id]).call }.to change { relation.count }.by(-1) }
+      specify { expect { subject.by_id(user[:id]).call }.to change { relation.count }.by(-1) }
 
       describe 'before delete' do
-        specify { expect { relation.alter_by_id(user[:id]).one! }.to_not raise_error }
-
-        specify(:deprecated) { expect { relation.by_id(user[:id]).one! }.to_not raise_error }
+        specify { expect { relation.by_id(user[:id]).one! }.to_not raise_error }
       end
 
       describe 'after delete' do
-        before { subject.alter_by_id(user[:id]).call }
+        before { subject.by_id(user[:id]).call }
 
-        specify { expect { relation.alter_by_id(user[:id]).one! }.to raise_error(ROM::TupleCountMismatchError) }
-
-        specify(:deprecated) { expect { relation.by_id(user[:id]).one! }.to raise_error(ROM::TupleCountMismatchError) }
+        specify { expect { relation.by_id(user[:id]).one! }.to raise_error(ROM::TupleCountMismatchError) }
       end
     end
   end

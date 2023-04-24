@@ -1,12 +1,10 @@
 # ROM DynamoDB Adapter
- [![Gem Version](https://badge.fury.io/rb/rom-dynamodb.svg)](https://badge.fury.io/rb/rom-dynamodb) [![GitHub](https://img.shields.io/badge/github-davidkelley%2From--dynamo-blue.svg)](https://github.com/davidkelley/rom-dynamodb) [![Documentation](http://img.shields.io/badge/docs-rdoc.info-blue.svg)](http://www.rubydoc.info/github/davidkelley/rom-dynamodb) [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)  [![Gitter](http://img.shields.io/badge/gitter-rom--rb-red.svg)](https://gitter.im/rom-rb/chat)
 
- [![Code Climate](https://codeclimate.com/github/davidkelley/rom-dynamodb/badges/gpa.svg)](https://codeclimate.com/github/davidkelley/rom-dynamodb) [![Coverage Status](https://coveralls.io/repos/github/davidkelley/rom-dynamodb/badge.svg?branch=master)](https://coveralls.io/github/davidkelley/rom-dynamodb?branch=master) [![Dependency Status](https://gemnasium.com/badges/github.com/davidkelley/rom-dynamodb.svg)](https://gemnasium.com/github.com/davidkelley/rom-dynamodb)
- [![Build Status](https://travis-ci.org/davidkelley/rom-dynamodb.svg?branch=master)](https://travis-ci.org/davidkelley/rom-dynamodb) [![Inline docs](http://inch-ci.org/github/davidkelley/rom-dynamodb.svg?branch=master)](http://inch-ci.org/github/davidkelley/rom-dynamodb)
+Original repository (forked from): https://github.com/davidkelley/rom-dynamodb
+It seems that above is not maintained anymore. This fork updates gem to use with latest rom and aws-sdk versions.
+Soon it will be adapted for use with Ruby 3. For now tested and
 
----
-
-This adapter uses [ROM (>= 2.0.0)](http://rom-rb.org/) to provide an easy-to-use, clean and understandable interface for [AWS DynamoDB](https://aws.amazon.com/documentation/dynamodb/).
+This adapter uses [ROM (>= 5.3.0)](http://rom-rb.org/) to provide an easy-to-use, clean and understandable interface for [AWS DynamoDB](https://aws.amazon.com/documentation/dynamodb/).
 
 ## Installation
 
@@ -26,18 +24,18 @@ Or install it yourself as:
 
 ## Usage
 
-The following container setup is for demonstration purposes only. You should follow the standard way of integrating ROM into your environment, as [documented here](http://rom-rb.org/learn/advanced/flat-style-setup/).
+The following container setup is for demonstration purposes only. You should follow the standard way of integrating ROM into your environment, as [documented here](https://rom-rb.org/learn/core/5.2/quick-setup/).
 
 ```ruby
 require 'rom/dynamodb'
 
 TABLE = "my-dynamodb-users-table"
 
-# any other AWS::DynamoDB::Client options
+# any other Aws::DynamoDB::Client options
 credentials = { region: 'us-east-1' }
 
 container = ROM.container(:dynamodb, credentials) do |rom|
-  rom.relation(:users) do
+  rom.relations[:users] do
     # Key Schema: id<Hash>
     dataset TABLE
 
@@ -46,7 +44,7 @@ container = ROM.container(:dynamodb, credentials) do |rom|
     end
   end
 
-  rom.commands(:users) do
+  rom.commands[:users] do
     FILTER = Functions[:symbolize_keys] >> Functions[:accept_keys, [:id]]
 
     define(:create) do
@@ -67,7 +65,7 @@ container = ROM.container(:dynamodb, credentials) do |rom|
   end
 end
 
-relation = container.relation(:users)
+relation = container.relations[:users]
 
 relation.count # => 1234
 
@@ -97,7 +95,7 @@ delete.by_id(user[:id]).call
 
 ```ruby
 container = ROM.container(:dynamodb, credentials) do |rom|
-  rom.relation(:logs) do
+  rom.relations[:logs] do
     # Key Schema: host<Hash>, timestamp<Range>
     dataset "my-logs-table"
 
@@ -134,7 +132,7 @@ end
 # create fake logs
 container.commands[:logs][:create].call(logs)
 
-relation = container.relation(:logs)
+relation = container.relations[:logs]
 
 relation.count == num_of_logs # => true
 
@@ -154,6 +152,7 @@ last = relation.where(ip: host) { ip == host }.descending.after(0).offset(offset
 
 last == logs.last # => true
 ```
+
 ---
 
 ## Development
@@ -168,12 +167,12 @@ $ docker-compose build
 You can then begin developing, running RSpec tests with the following command:
 
 ```
-$ docker-compose run rom rspec [args...]
+$ docker-compose run --rm rom rspec [args...]
 ```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/davidkelley/rom-dynamo. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/dsawa/rom-dynamodb. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
