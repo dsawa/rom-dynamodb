@@ -190,7 +190,7 @@ module ROM
     describe '#count' do
       subject { relation.count }
 
-      it { should be_a Fixnum }
+      it { should be_a Integer }
 
       it { should be > 0 }
     end

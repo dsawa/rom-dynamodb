@@ -1,3 +1,6 @@
+#### v.3.1.0
+- Ruby 3 support.
+
 #### v.3.0.0
 
 - Removed deprecated methods equal, between, after, before

@@ -252,12 +252,10 @@ module ROM
 
       def append(operation = :query, &block)
         result = block.call
-        if result[:key_condition_expression]
 
-        end
         if result
           args = { name: name, config: config, operation: operation }
-          self.class.new(args.merge(queries: queries + [result].flatten))
+          self.class.new(**args.merge(queries: queries + [result].flatten))
         else
           self
         end
